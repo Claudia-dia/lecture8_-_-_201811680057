@@ -1,0 +1,45 @@
+--定义存储过程
+create procedure program
+    --@parameter int 
+    --@parameter int output 
+as 
+begin 
+    print '';
+    --return ''; 
+end
+
+execute program
+
+declare @cc varchar(10)
+execute @cc = program
+
+
+
+--定义函数
+create function func_1(@func_parameter_1 int,@func_parameter_2 int)
+returns int
+as 
+begin 
+    return 1
+end
+
+
+
+调用函数
+declare @params varchar(100)
+select @params = dbo.func_1(1,2);
+
+
+
+创建触发器
+create trigger Member_Updates
+on Member for update
+as
+declare @idnew varchar(36);
+declare @idold varchar(36);
+select @idnew = id from inserted;--inserted在修改时存放的新值的临时表
+select @idold = id from deleted;--deleted在修改时存放的旧值的临时表
+insert into Member(ID,Sex) values(@idnew+'new',0);
+insert into Member(ID,Sex) values(@idold+'old',0);
+
+应用场景：如银行的信息管理系统对报表的管理之类的
